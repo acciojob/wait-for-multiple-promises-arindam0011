@@ -2,6 +2,7 @@
 let trow = document.getElementById("output");
 
 let Default = document.createElement("tr");
+Default.id="loading";
 Default.innerHTML = `<td colspan="2">Loading...</td>`;
 
 trow.appendChild(Default);
