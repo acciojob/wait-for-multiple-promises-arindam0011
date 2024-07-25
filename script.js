@@ -1,61 +1,45 @@
-
 let trow = document.getElementById("output");
 
+// Create and add the loading row
 let Default = document.createElement("tr");
-Default.id="loading";
 Default.innerHTML = `<td colspan="2">Loading...</td>`;
-
 trow.appendChild(Default);
-let totaRandomTime = 0;
-new Promise((resolve, reject) => {
-	let delay=Math.floor(Math.random()*(3000-1000+1)+1000);
-		totaRandomTime += delay;
-	setTimeout(() => {
-		let tr = document.createElement("tr");
-		tr.innerHTML = `<td>Promise 1</td>
-					  <td class="time">${parseInt(delay/1000)}</td>`;
-		trow.insertBefore(tr, Default);
-		resolve();
-	}, delay)
-})
-	.then(() => {
-		let delay=Math.floor(Math.random()*(3000-1000+1)+1000);
-		totaRandomTime += delay;
-		return new Promise((resolve, reject) => {
-			
-			setTimeout(() => {
-				let tr = document.createElement("tr");
-				tr.innerHTML = `<td>Promise 2</td>
-						  <td class="time">${parseInt(delay/1000)}</td>`;
-				trow.insertBefore(tr, Default);
-				resolve();
-			}, delay)
-		})
-	})
-	.then(() => {
-		let delay=Math.floor(Math.random()*(3000-1000+1)+1000);
-			totaRandomTime += delay;
-		return new Promise((resolve, reject) => {
-			
-			setTimeout(() => {
-				let tr = document.createElement("tr");
-				tr.innerHTML = `<td>Promise 3</td>
-						  <td class="time">${parseInt(delay/1000)}</td>`;
-				trow.insertBefore(tr, Default);
-				resolve();
-			}, delay)
-		})
-	})
-	.then(() => {
 
-		return new Promise((resolve, reject) => {
+let totalTime = 0;
+
+// Function to create a promise that resolves after a random delay
+let createPromise = async (name) => {
+	let delay = Math.floor(Math.random() * (3000 - 1000 + 1) + 1000);
+	totalTime += delay;
+	let promise = await new Promise((resolve) => {
+		setTimeout(() => {
 			let tr = document.createElement("tr");
-			tr.innerHTML = `<td>Total</td>
-						  <td>${totaRandomTime/1000}</td>`;
+			tr.innerHTML = `<td>${name}</td>
+                            <td class="time">${parseInt(delay / 1000)}</td>`;
 			trow.insertBefore(tr, Default);
 			resolve();
-		})
-	}).then(()=>{
-				trow.removeChild(Default);
-	})
+		}, delay);
+	});
+	return promise;
+}
 
+// Create three promises
+let promise1 = createPromise("Promise 1");
+let promise2 = createPromise("Promise 2");
+let promise3 = createPromise("Promise 3");
+
+// Array of promises
+let promises = [promise1, promise2, promise3];
+
+// Use Promise.all() to wait for all promises to resolve
+Promise.all(promises)
+	.then((results) => {
+		let tr = document.createElement("tr");
+			tr.innerHTML = `<td>Total</td>
+                            <td class="time">${totalTime.toFixed(3)/1000}</td>`;
+			trow.appendChild(tr);
+		trow.removeChild(Default); // Remove the loading row
+	})
+	.catch(error => {
+		console.error("An error occurred:", error);
+	});
