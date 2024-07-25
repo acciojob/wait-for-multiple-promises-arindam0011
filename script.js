@@ -3,6 +3,7 @@ let trow = document.getElementById("output");
 // Create and add the loading row
 let Default = document.createElement("tr");
 Default.innerHTML = `<td colspan="2">Loading...</td>`;
+Default.id="loading"
 trow.appendChild(Default);
 
 let totalTime = 0;
