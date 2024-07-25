@@ -3,7 +3,6 @@ let trow = document.getElementById("output");
 // Create and add the loading row
 let Default = document.createElement("tr");
 Default.innerHTML = `<td colspan="2">Loading...</td>`;
-Default.id="loading"
 trow.appendChild(Default);
 
 let totalTime = 0;
@@ -24,7 +23,6 @@ let createPromise = async (name) => {
 	return promise;
 }
 
-
 // Create three promises
 let promise1 = createPromise("Promise 1");
 let promise2 = createPromise("Promise 2");
@@ -36,8 +34,7 @@ let promises = [promise1, promise2, promise3];
 // Use Promise.all() to wait for all promises to resolve
 Promise.all(promises)
 	.then((results) => {
-		
-			Default.innerHTML = `<td>Total</td>
+		Default.innerHTML = `<td>Total</td>
                             <td class="time">${totalTime.toFixed(3)/1000}</td>`;
 	})
 	.catch(error => {
